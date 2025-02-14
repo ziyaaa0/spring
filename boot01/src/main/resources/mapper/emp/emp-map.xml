@@ -39,6 +39,10 @@
 	
 	<!-- 등록 -->
 	<insert id="insertEmpInfo" parameterType="EmpVO">
+		<selectKey keyProperty="employeeId" resultType="Integer" order="BEFORE">
+			SELECT NVL(MAX(employee_id),100) +1
+			FROM employees
+		</selectKey>
 		INSERT INTO employees
 		(
 			employee_id
@@ -46,15 +50,49 @@
 		    , email
 		    , job_id
 		    , hire_date
+		    <if test="salary > 0">
+		    , salary
+		    </if>
 		)
 		VALUES
 			(	
-				employees_seq.NEXTVAL				
-				,#{lastName}
-				,#{email}
-				,#{jobId}
-				, sysdate
+				<!-- employees_seq.NEXTVAL -->	
+				#{employeeId}	
+				, #{lastName}
+				, #{email}
+				, #{jobId}
+				<choose>
+					<when test="hireDate != null">
+						, #{hireDate}
+					</when>
+					<otherwise>					
+						, sysdate
+					</otherwise>
+				</choose>
+				<if test="salary > 0">
+				, #{salary}
+				</if>
 			)
-			
 	</insert>
+	
+	<!-- 수정 -->		
+	<update id="updateEmpInfo" parameterType="EmpVO">
+		UPDATE employees
+		SET
+			last_name = #{lastName}
+			<if test="jobId != null and !jobId.equals('')">
+			<!-- 특정 조건(test속성)을 만족할때만 실행되는 구문 -->
+			, job_id = #{jobId}
+			</if>
+			, hire_date = #{hireDate}
+		WHERE employee_id = #{employeeId}	
+	</update>
+	
+	<!-- 삭제 -->	
+	<delete id="deleteEmpInfo" parameterType="int">
+							<!-- 객체가 아닌 기본 타입일 경우 매개변수 그대로 사용 -->
+		DELETE FROM employees
+		WHERE employee_id = #{empId}
+	</delete>
+	
 </mapper>
