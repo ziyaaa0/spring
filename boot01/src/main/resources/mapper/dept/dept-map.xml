@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.dept.mapper.DeptMapper">
-
+	<!-- 전체 조회 -->
 	<select id="selectDeptList" resultType="DeptVO">
 		SELECT department_id
 				, department_name
@@ -10,5 +10,56 @@
 		FROM departments
 		ORDER BY department_id
 	</select>
+	
+	<!-- 단건 조회 -->
+	<select id="selectDeptInfo" parameterType="DeptVO" resultType="DeptVO">
+		SELECT department_id
+				, department_name
+				, manager_id
+				, location_id
+		FROM departments
+		WHERE department_id = #{departmentId}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insertDeptInfo" parameterType="DeptVO">
+		<selectKey keyProperty="departmentId" resultType="Integer" order="BEFORE">
+			SELECT NVL(MAX(department_id),100) +10
+			FROM departments
+		</selectKey>
+		INSERT INTO departments
+		(
+			department_id
+		    , department_name
+		    , manager_id
+		    , location_id
+		)
+		VALUES
+			(					
+				#{departmentId}	
+				, #{departmentName}
+				, #{managerId}
+				, #{locationId}
+			)
+	</insert>
+	
+	<!-- 수정 -->		
+	<update id="updateDeptInfo" parameterType="DeptVO">
+		UPDATE departments
+		SET
+			department_name = #{departmentName}
+			<if test="managerId != null and !manager.equals('')">
+			<!-- 특정 조건(test속성)을 만족할때만 실행되는 구문 -->
+			, manager_id = #{managerId}
+			</if>
+		WHERE department_id = #{departmentId}	
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteDeptInfo" parameterType="int">
+		DELETE FROM departments
+		WHERE department_id = #{departmentID}
+	</delete>
+	
 	
 </mapper>

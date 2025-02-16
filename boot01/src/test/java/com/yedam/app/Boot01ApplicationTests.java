@@ -1,13 +1,15 @@
 package com.yedam.app;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,6 +22,69 @@ import com.yedam.app.emp.service.EmpVO;
 class Boot01ApplicationTests {
 	@Autowired //필드주입 => 단순 테스트용
 	private EmpMapper empMapper;
+	@Autowired
+	private DeptMapper deptMapper;
+	
+	
+	//@Test
+	void deptSelectTest() {
+		List<DeptVO> list = deptMapper.selectDeptList();
+		for(DeptVO dept : list) {
+			
+			System.out.println(dept);
+		}
+		assertTrue(!list.isEmpty());
+	}
+	
+	//@Test
+	void deptInfoTest() {
+		DeptVO deptVO = new DeptVO();
+		deptVO.setDepartmentId(60);
+		
+		DeptVO findVO = deptMapper.selectDeptInfo(deptVO);
+		
+		assertEquals("IT", findVO.getDepartmentName());
+		//첫번째 매개변수 : 기대하는 값
+		//두번째 매개변수 : 실제 값
+		// => 두 개가 같으면 테스트 성공, 다르면 실패
+	}
+	
+	//@Test
+	void deptInsertTest() throws ParseException {
+		DeptVO deptVO = new DeptVO();
+		deptVO.setDepartmentName("BUILD");
+		deptVO.setManagerId(100);
+		deptVO.setLocationId(1700);
+		
+		int result = deptMapper.insertDeptInfo(deptVO);
+		
+		assertEquals(1, result);
+		
+	}
+	
+	@Test
+	void deptUpdateTest() {
+		//1) 단건 조회
+		DeptVO deptVO = new DeptVO();
+		deptVO.setDepartmentId(280);
+		
+		DeptVO findVO = deptMapper.selectDeptInfo(deptVO);		
+		
+		//2) 수정할 데이터 
+		findVO.setDepartmentName("Editor");
+		findVO.setManagerId(null);
+		
+		
+		//3) 수정
+		int result = deptMapper.updateDeptInfo(findVO);
+		assertEquals(1,result);
+	}
+	
+	//@Test
+	void deptdeleteTest() {
+		int result = deptMapper.deleteDeptInfo(220);
+		assertEquals(1,result);
+	}
 	
 	//@Test
 	void selectTest() {
