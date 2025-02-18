@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+	<!-- /* 타임리프 기본방식
+			1) th속성 = "${}"
+			2) th:src="@{}" or
+			th:href="@{}" or
+			th:action="@{}" */ -->
+			
+	<p th:id="${empInfo.employeeId}" name="emp" 
+	th:text="${empInfo.lastName + ' , ' + empInfo.firstName}">	
+	</p>
+	<hr>
+	<th:block th:each="emp, state : ${empList}">
+		<p th:if="${state.odd}" th:id = "${state.index}"> [[ ${emp.lastName} ]]</p>
+	</th:block>
+	<hr>
+	<th:block th:if="${!empList.isEmpty()}">
+		<p th:each="num : ${ #numbers.sequence(1,5)}">
+		- 숫자 : [[ ${num} ]]</p>
+		<!-- /*  [[ ${"- 숫자 :" + num} ]]</p> */ -->
+	</th:block>
+	<hr>
+	<a href="/empList">전체조회</a>
+	<a th:href="@{/empList}">전체조회</a>
+</body>
+</html>
