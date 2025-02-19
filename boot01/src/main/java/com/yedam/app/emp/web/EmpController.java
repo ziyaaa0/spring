@@ -59,11 +59,12 @@ public class EmpController {
 		// classpath:/templates/emp/info.html
 	}
 	
+	
 	//등록 - 등록 페이지 : GET
 	@GetMapping("empInsert")
 	public String empInsertForm() {
 		return "emp/insert";
-	}
+	}// classpath:/templates/emp/insert.html
 	
 	//등록 - 처리 : POST => form 태그를 통한 submit
 	//				=> 이미지가 있는 경우 multipart/form-data 
@@ -83,6 +84,7 @@ public class EmpController {
 		return url;		
 	}
 	
+	
 	//수정 - 페이지 : GET <=> 단건조회
 	@GetMapping("empUpdate")
 	public String empUpdate(EmpVO empVO, Model model) {
@@ -92,7 +94,8 @@ public class EmpController {
 		 model.addAttribute("emp", findVO);		
 		//3) View
 		 return "emp/update";
-	}	
+	}	// classpath:/templates/emp/update.html
+	
 	//수정 - 처리 : POST / AJAX => JSON (@RequestBody)
 	@PostMapping("empUpdate")
 	@ResponseBody // AJAX
@@ -101,10 +104,12 @@ public class EmpController {
 		return empService.modifyEmpInfo(empVO);
 	}
 	
+	
 	//단건삭제 - 처리 : GET + 전달받을 데이터 1건
 			//		=> QueryString(@RequestParam)
-	@GetMapping("empDelete")
+	@GetMapping("empDelete") // /empDelete?employeeId=100
 	public String empDelete(Integer employeeId) {
+		
 		empService.removeEmpInfo(employeeId);
 		return "redirect:empList";
 	}

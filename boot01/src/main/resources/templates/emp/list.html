@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="content">
+<!-- /* common/layouts/default_layout */  -->
 <head>
 <meta charset="UTF-8">
-<meta name="contextPath" th:value="${contextPath}">
 <title>사원 관리</title>
 <style>
 	table, th, td {
@@ -26,8 +29,8 @@
 			<tbody>
 				<th:block th:each="info, sts : ${emps}">
 					<!--/* 반복하고자 하는 태그 */-->
-					<tr
-						th:onclick="|Location.href='@{/empInfo(employeeId=${info.employeeId})}'|">
+					<tr						
+						th:onclick="|location.href='@{/empInfo(employeeId=${info.employeeId})}'|">						
 						<td>[[ ${sts.count} ]]</td>
 						<td th:text="${info.employeeId}"></td>
 						<td th:text="${info.lastName}"></td>

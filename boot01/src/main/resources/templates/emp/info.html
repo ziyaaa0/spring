@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="content">
 <head>
 <meta charset="UTF-8">
 <title></title>
@@ -32,9 +35,10 @@
 			<input type="number" id="sal" step="0.01" th:value="${emp.salary}" readonly>
 		</div>
 		<div>
-			<button type="button">수정</button>
-			<button type="button">목록</button>
-			<button type="button">삭제</button>
+			<button type="button" th:onclick="|location.href='@{empUpdate(employeeId=${emp.employeeId})}'|">수정</button>
+			<button type="button"
+				th:onclick="|location.href='@{/empList}'|">목록</button>
+			<button type="button" th:onclick="|location.href='@{/empDelete(employeeId=${emp.employeeId},country=Kor)}'|">삭제</button>
 		</div>
 	</div>
 </body>
