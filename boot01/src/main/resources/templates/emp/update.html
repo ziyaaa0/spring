@@ -5,7 +5,8 @@
 		layout:fragment="content">
 <head>
 <meta charset="UTF-8">
-<meta name="contextPath" th:value="${contextPath}">
+<meta name="_csrf_header" th:value="${_csrf.headerName}">
+<meta name="_csrf" th:value="${_csrf.token}">
 <title></title>
 </head>
 <body>
@@ -40,11 +41,21 @@
 		</div>
 	</form>
 	<script>
-		const context = document.querySelector('meta[name="contextPath"]')
-		.getAttribute('value');
-	
+		const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('value');
+		const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('value');
+		
 		document.querySelector('form[name="updateForm"] button')
 			.addEventListener('click', updateAjax);
+	
+		const context = document.querySelector('meta[name="contextPath"]')
+		.getAttribute('value');
+		
+		let headers = new Headers();
+	
+		headers.append('Content-Type', 'application/json');
+		headers.append(csrfHeader, csrfToken);
+		
+		headers.forEach(console.log);
 		
 		function updateAjax(event){
 			//1) 보낼 데이터 가져오기
@@ -52,9 +63,7 @@
 			//2) AJAX
 			fetch(`${context}/empUpdate` , {
 				method: 'post',
-				headers: {
-					'Content-type' : 'application/json'
-				},
+				headers,
 				body : JSON.stringify(dataObj),
 			})
 			

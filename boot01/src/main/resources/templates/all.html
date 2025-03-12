@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html th="https://www.thymeleaf.org/"
+ sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+	<h1>메인 페이지입니다.</h1>
+	<ul>
+		<li>
+			<a href="@{/user}">일반 사용자용 페이지로</a>
+		</li>
+		<li authorize="hasRole('ADMIN')">
+			<a href="@{/admin}">관리자 전용 페이지로</a>
+		</li>
+	</ul>
+	<th:block authorize="isAuthenticated()">
+		<p authentication="name"></p>
+		<p authentication="principal.username"></p>
+		<p authentication="principal.authorities"></p>
+	<form action="@{/logout}" method="post">
+		<button type="submit">로그아웃</button>
+		</form>
+	</th:block>
+</body>
+</html>
